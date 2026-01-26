@@ -25,6 +25,36 @@ Cloud resources can be scaled up or down quickly based on demand. This means you
 
 
 
+What is IAM ?
+
+IAM is a serivce that helps you securely control access to AWS resources. 
+It allows you to manage users, roles, and permissions to define who can access what within your AWS environment.
+
+Create users : You can create individual user accounts for people who need
+ access to your AWS resources.
+
+ Assign Permission : You can Assign specific permission to users, groupsm or 
+ control what action they can perform on AWS serivces.
+
+ Create Groups : You can group user together and assign permission to the group, making management easier for multiple users.'
+
+Create Roles : You can create roles to assign temporarry permission to aws services or users, especially for securely managing permissions accross different AWS resources.
+
+Define Policies : You can create and attach custom policies to define finegraned permisions for controlling access to AWS resources.
+
+Manage Federated Access : IAM allows intergrating with external identity providers like Active diroctory for centralized management of users access accross AWS.
+
+MFA :- MFA (Multifactor Authentication) is an extra layer of security that requires users to provide two or more forms of verification,, like a password and a code from their phone, to access their accpunts.  
+
+
+ 
+
+
+
+ 
+
+
+
 
 
 
