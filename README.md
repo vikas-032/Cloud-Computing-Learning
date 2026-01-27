@@ -4,6 +4,7 @@ The Basics of Cloud Computing
 Cloud Computing
 
 EC2 - Elastic Compute Cloude 2
+Amazon EC2 (Elastic Compute Cloud) is a core AWS service that lets you rent secure, resizable virtual servers—called instances—on demand. It provides scalable computing power without needing to buy physical hardware, making it the backbone of most cloud applications today.
 
 IAAS - Infrastructure As a Service
 
