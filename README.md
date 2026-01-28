@@ -48,6 +48,9 @@ Manage Federated Access : IAM allows intergrating with external identity provide
 MFA :- MFA (Multifactor Authentication) is an extra layer of security that requires users to provide two or more forms of verification,, like a password and a code from their phone, to access their accpunts.  
 
 
+Function as a Service (FaaS)
+The Service provider handles all of the infrastructure, including servours, networking, and storage.
+
  
 
 
