@@ -51,6 +51,22 @@ MFA :- MFA (Multifactor Authentication) is an extra layer of security that requi
 Function as a Service (FaaS)
 The Service provider handles all of the infrastructure, including servours, networking, and storage.
 
+
+Networking : It refors to connecting two or more computers and devices together so they can share data, resources and services such as a files , printers m internet access , and more.
+
+In computer network , protocols (rules for communication) ensure taht devices understand each other and exchange information correctly. examples include TCP/IP, HTTP and FTP
+
+There are types of networks :
+LAN
+WAN
+MAN
+LAN:- That is refers to a Local area network that is coverd neaby your house and the cover area about 100 to 200 sq ft area.
+WAN :- A wireless version of LAN using Wi-Fi technology.
+Devices connect without cables ,Common in homes, schools, and public hotspots.
+MAN:- Metropolitan Area Network , Covers a larger area ( a city , campus , or town) than a LAN but smaller that a WAN.
+oftern used by city govt, or large organisation.
+
+
  
 
 
