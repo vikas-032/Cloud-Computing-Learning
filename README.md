@@ -67,6 +67,58 @@ MAN:- Metropolitan Area Network , Covers a larger area ( a city , campus , or to
 oftern used by city govt, or large organisation.
 
 
+OSI Model : Open Systems Interconnection Model
+
+The 7 Layers of the OSI Model (Top → Bottom)
+
+Application Layer
+
+Closest to the user; provides network services to applications (e.g., web browsers, email clients).
+
+Examples: HTTP, FTP, SMTP.
+
+Presentation Layer
+
+Converts data formats, handles encryption/decryption and compression.
+
+Makes sure the data from the sending system can be understood by the receiving system.
+
+Session Layer
+
+Manages and controls dialogue (sessions) between two devices.
+
+Responsible for establishing, maintaining, and terminating connections.
+
+Transport Layer
+
+Ensures reliable transmission of data between devices.
+
+Handles segmentation, flow control, and error checking.
+
+Common protocols: TCP, UDP.
+
+Network Layer
+
+Responsible for data routing and addressing across networks.
+
+Assigns logical addresses (e.g., IP addresses) and forwards packets.
+
+Data Link Layer
+
+Ensures error-free communication between devices on the same network.
+
+Frames data and manages physical addressing (MAC).
+
+Physical Layer
+
+Deals with the physical transmission of bits over cables, fiber, or wireless.
+
+Defines electrical, mechanical and procedural specs (e.g., connectors, cables)
+
+
+
+
+
  
 
 
