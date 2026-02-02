@@ -116,6 +116,9 @@ Deals with the physical transmission of bits over cables, fiber, or wireless.
 Defines electrical, mechanical and procedural specs (e.g., connectors, cables)
 
 
+The most important topic is OSI model.
+
+
 
 
 
