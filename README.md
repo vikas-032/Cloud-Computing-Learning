@@ -118,6 +118,12 @@ Defines electrical, mechanical and procedural specs (e.g., connectors, cables)
 
 The most important topic is OSI model.
 
+The TCP/IP Model
+The TCP/IP model is the network model used in the current Internet Architecture.
+It is a concise version of the OSI mpdel. Therefore, the layers in the TCP/IP protocol suite do not match exactly with those in the OSI model.
+The original TCP/IP protocol suite was defined as four software layers built upon the hardware.
+
+Difference b/w tcp &IP
 
 
 
