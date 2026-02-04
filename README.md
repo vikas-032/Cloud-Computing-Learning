@@ -125,6 +125,18 @@ The original TCP/IP protocol suite was defined as four software layers built upo
 
 Difference b/w tcp &IP
 
+How TCP/IP Works (Short Flow)
+
+Data is created by an application (e.g., browser)
+
+TCP splits data into segments and adds sequence numbers
+
+IP assigns source & destination IP addresses
+
+Data is transmitted over the network
+
+TCP reassembles data correctly at the destination
+
 
 
 
