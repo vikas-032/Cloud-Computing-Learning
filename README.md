@@ -137,6 +137,10 @@ Data is transmitted over the network
 
 TCP reassembles data correctly at the destination
 
+What is the Data Link Layer?
+
+The Data Link Layer is the 2nd layer of the OSI model. It is responsible for reliable data transfer between two directly connected devices on the same network.
+
 
 
 
