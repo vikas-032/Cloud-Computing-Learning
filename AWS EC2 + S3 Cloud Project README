@@ -43,7 +43,60 @@ Client → EC2 Instance → S3 Bucket
 
 ---
 
+
 ## 🧠 Skills Gained
 - EC2 provisioning
 - IAM role configuration
 - Cloud storage integration
+
+
+
+# AWS Cloud Project – EC2 and S3 Integration
+
+## 📌 Description
+This project demonstrates deploying a virtual server on AWS EC2 and integrating it with S3 storage.
+
+---
+
+## 🔧 Services Used
+- Amazon EC2
+- Amazon S3
+- IAM
+- VPC
+- Security Groups
+
+---
+
+## 🏗️ Architecture
+Client → EC2 Instance → S3 Bucket
+
+---
+
+## 🚀 Implementation Steps
+1. Launch EC2 instance
+2. Configure IAM role for S3 access
+3. Create and attach S3 bucket
+4. Upload and retrieve data from EC2
+
+---
+
+## 🔐 Security
+- IAM role-based access
+- SSH key authentication
+- Restricted inbound rules
+
+---
+
+## 📊 Results
+- Secure data storage using S3
+- Reliable compute using EC2
+- Cloud-native architecture
+
+---
+
+## 🧠 Skills Gained
+- EC2 provisioning
+- IAM role configuration
+- Cloud storage integration
+
+
