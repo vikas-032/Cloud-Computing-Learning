@@ -1,0 +1,127 @@
+IP addressing 
+
+IP = Internet Protocol Address
+
+Definition:
+An IP address is a unique numerical identifier assigned to every device 
+(computer, smartphone, server, printer, etc.) connected to a network that 
+uses the Internet Protocol for communication.
+
+Think of it like:
+├─ Physical address (street address) for physical mail
+├─ Phone number for phone calls
+├─ Email address for emails
+└─ IP address for data packets on networks
+
+Real-World Analogy:
+┌─────────────────────────────────────────────┐
+│ Sending Physical Mail                       │
+├─────────────────────────────────────────────┤
+│ Sender's Address: 123 Main St               │
+│ Receiver's Address: 456 Oak Ave             │
+│ Postal Service Routes Mail                  │
+└─────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────┐
+│ Sending Data Packets (IP)                   │
+├─────────────────────────────────────────────┤
+│ Sender's IP: 192.168.1.5                    │
+│ Receiver's IP: 8.8.8.8                      │
+│ Internet Routes Data                        │
+└─────────────────────────────────────────────┘
+
+Why IP Addresses Matter:
+✓ Unique identification of devices
+✓ Routing packets across networks
+✓ Enabling communication between devices
+✓ Network management and security
+✓ Load balancing and traffic routing
+
+
+IPv4 Address Format:
+
+192.168.1.5
+│   │    │  │
+│   │    │  └─ Octet 4 (Host)
+│   │    └───── Octet 3 (Host/Subnet)
+│   └────────── Octet 2 (Subnet)
+└────────────── Octet 1 (Network)
+
+Each Octet:
+├─ Range: 0-255 (8 bits = 256 possible values)
+├─ Separated by dots (.)
+├─ Written in decimal (not binary)
+└─ Example: 192.168.001.005 (leading zeros optional)
+
+Total IPv4 Addresses:
+4 octets × 8 bits each = 32 bits total
+2^32 = 4,294,967,296 total possible addresses
+
+IPv4 Classes (Older Classification - Still Important):
+
+┌─────────┬──────────────────┬──────────┬──────────────────┐
+│ Class   │ First Octet Range│ Example  │ Total Hosts      │
+├─────────┼──────────────────┼──────────┼──────────────────┤
+│ Class A │ 1-126            │ 10.0.0.0 │ 16 Million       │
+│         │ (0 reserved,     │ /8       │ per network      │
+│         │  127 loopback)   │          │                  │
+├─────────┼──────────────────┼──────────┼──────────────────┤
+│ Class B │ 128-191          │172.16.0.0│ 65,536 hosts     │
+│         │                  │ /16      │ per network      │
+├─────────┼──────────────────┼──────────┼──────────────────┤
+│ Class C │ 192-223          │192.168.. │ 254 hosts        │
+│         │                  │.0 /24    │ per network      │
+├─────────┼──────────────────┼──────────┼──────────────────┤
+│ Class D │ 224-239          │224.0.0.0 │ Multicast        │
+│         │                  │          │ (special use)    │
+├─────────┼──────────────────┼──────────┼──────────────────┤
+│ Class E │ 240-255          │240.0.0.0 │ Reserved         │
+│         │                  │          │ (experimental)   │
+└─────────┴──────────────────┴──────────┴──────────────────┘
+
+Note: CIDR notation (/8, /16, /24) is now preferred over class-based
+
+IPv4 Address Ranges:
+
+Public IP Ranges (Routable on Internet):
+├─ 1.0.0.0 to 9.255.255.255
+├─ 11.0.0.0 to 172.15.255.255
+├─ 172.32.0.0 to 192.167.255.255
+├─ 192.169.0.0 to 198.18.255.255
+├─ 198.20.0.0 to 223.255.255.255
+└─ Can be accessed from internet
+
+Private IP Ranges (RFC 1918 - NOT Routable):
+├─ 10.0.0.0 to 10.255.255.255 (10/8)
+│  └─ 16,777,216 addresses - Used in organizations
+├─ 172.16.0.0 to 172.31.255.255 (172.16/12)
+│  └─ 1,048,576 addresses - Used in organizations
+├─ 192.168.0.0 to 192.168.255.255 (192.168/16)
+│  └─ 65,536 addresses - Most common (home routers)
+└─ Cannot be accessed directly from internet
+
+Special Addresses:
+
+127.0.0.1 - Localhost (Your Own Machine)
+├─ Also called "loopback"
+├─ Points to your own computer
+├─ Entire 127.0.0.0/8 range is reserved
+└─ 127.0.0.1 most common
+
+0.0.0.0 - All Addresses
+├─ Represents "any" or "all"
+├─ Used in routing: "default route"
+├─ Used in listening: "listen on all interfaces"
+└─ Never sent on network
+
+255.255.255.255 - Broadcast
+├─ Special broadcast address
+├─ Sends to all devices on network
+├─ Example: 192.168.1.255 broadcasts to all on 192.168.1.0/24
+└─ Not routable beyond local network
+
+169.254.0.0/16 - Link-Local
+├─ Self-assigned when DHCP fails
+├─ Device assigns itself IP from this range
+├─ Indicates configuration problem
+└─ Example: 169.254.42.1
