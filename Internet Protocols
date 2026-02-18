@@ -125,3 +125,36 @@ Special Addresses:
 ├─ Device assigns itself IP from this range
 ├─ Indicates configuration problem
 └─ Example: 169.254.42.1
+
+
+
+0                   1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|Version|  IHL  |Type of Service|          Total Length         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Identification        |Flags|      Fragment Offset    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Time to Live |    Protocol   |         Header Checksum       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                       Source Address                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Destination Address                        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Options (if IHL > 5)                       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Key Fields:
+
+Version (4 bits): IPv4 = 4
+IHL (4 bits): Internet Header Length (in 32-bit words, minimum 5)
+Type of Service (8 bits): QoS parameters
+Total Length (16 bits): Entire packet size (header + data)
+Identification (16 bits): Unique identifier for fragments
+Flags (3 bits): Control flags (DF, MF, Reserved)
+Fragment Offset (13 bits): Position of fragment in original datagram
+TTL (8 bits): Time to Live
+Protocol (8 bits): Upper layer protocol (TCP=6, UDP=17, ICMP=1)
+Header Checksum (16 bits): Error detection for header only
+Source/Destination Address (32 bits each): IP addresses
+Options (variable): Optional fields (if IHL > 5)
