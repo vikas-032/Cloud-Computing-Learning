@@ -158,3 +158,11 @@ Protocol (8 bits): Upper layer protocol (TCP=6, UDP=17, ICMP=1)
 Header Checksum (16 bits): Error detection for header only
 Source/Destination Address (32 bits each): IP addresses
 Options (variable): Optional fields (if IHL > 5)
+
+
+
+What IPv6 Is and Why It Exists
+
+IPv6 (Internet Protocol version 6) is the successor to IPv4, designed to address critical limitations of the earlier protocol — primarily the exhaustion of its 32-bit address space. IPv4 provides ~4.3 billion addresses, which isn’t enough for today’s growth of internet-connected devices (IoT, mobile, cloud services, etc.). IPv6 expands this to a 128-bit address space, enabling approximately 3.4×10³⁸ unique addresses.
+
+IPv6 also embeds several improvements over IPv4: built-in security support, more efficient routing, simplified packet handling in routers, and better autoconfiguration mechanisms.
