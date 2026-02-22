@@ -24,6 +24,9 @@ Client → EC2 Instance → S3 Bucket
 ## 🚀 Implementation Steps
 1. Launch EC2 instance
 2. Configure IAM role for S3 access
+
+
+
 3. Create and attach S3 bucket
 4. Upload and retrieve data from EC2
 
@@ -102,3 +105,13 @@ Client → EC2 Instance → S3 Bucket
 EC2 Amazon Elastic compute cloud
 
 
+AWS IAM (Identity and Access Management) is the AWS service used to securely control who can access your 
+AWS resources and what they can do with them. It’s core to AWS security and access governance.
+
+What IAM Does
+
+Authentication & Authorization: IAM manages who can sign in (authenticate) and what actions they are allowed to perform (authorize) across AWS services.
+
+Centralized Control: You define identities (users, groups, roles) and permissions policies that determine access to AWS resources.
+
+Least Privilege: You can grant fine-grained permissions so identities only get the access they actually need. 
