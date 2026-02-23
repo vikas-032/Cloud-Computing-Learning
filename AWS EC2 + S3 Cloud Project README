@@ -115,3 +115,62 @@ Authentication & Authorization: IAM manages who can sign in (authenticate) and w
 Centralized Control: You define identities (users, groups, roles) and permissions policies that determine access to AWS resources.
 
 Least Privilege: You can grant fine-grained permissions so identities only get the access they actually need. 
+
+
+
+1) What Are EC2 Instance Types?
+
+EC2 instance types are configurations of virtual hardware (CPU, memory, storage, network) designed for different workloads. Each type is grouped into a family based on the resources it prioritizes. When you launch an instance, the selected type determines the underlying hardware resources your virtual machine gets.
+
+🧠 2) Main Categories of EC2 Instance Types
+
+Here are the primary families you should know:
+
+📌 1. General-Purpose Instances
+
+Provide a balanced mix of CPU, memory, and networking.
+
+Suitable for web servers, small/medium databases, development/test environments.
+
+Examples: t2, t3, t3a, t4g, m5, m6g, m7i
+
+T-series (t2/t3/t4g): Burstable performance — good baseline CPU with the ability to "burst" above it.
+M-series (m5/m6/m7): Balanced, fixed-performance general-purpose.
+
+📈 2. Compute-Optimized Instances
+
+Designed for CPU-intensive workloads needing high processing power.
+
+Use cases: batch processing, high-performance web servers, media transcoding.
+
+Examples: c5, c6g, c7g, c8gn
+
+🧠 3. Memory-Optimized Instances
+
+Offer large RAM footprints for memory-intensive applications.
+
+Use cases: in-memory databases, big data analytics, caching.
+
+Examples: r5, r6g, r7i, x1, x2idn, z1d, High-Memory families
+
+⚡ 4. Accelerated Computing Instances
+
+Include hardware accelerators like GPUs or custom chips.
+
+Use cases: machine learning, graphics processing, inference tasks.
+
+Examples: p4d, g5, inf1, trn1, f1
+
+💾 5. Storage-Optimized Instances
+
+Optimized for high, low-latency local storage operations.
+
+Use cases: high-throughput databases, big data workloads requiring heavy disk I/O.
+
+Examples: i3, i4i, d3, h1, i7i
+
+🚀 6. High-Performance Computing (HPC) Instances
+
+Tailored for large-scale compute clusters and complex simulations.
+
+Examples: hpc6a, hpc7a, hpc7g
