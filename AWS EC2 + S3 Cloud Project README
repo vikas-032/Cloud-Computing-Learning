@@ -174,3 +174,78 @@ Examples: i3, i4i, d3, h1, i7i
 Tailored for large-scale compute clusters and complex simulations.
 
 Examples: hpc6a, hpc7a, hpc7g
+What General-Purpose Instances Are
+
+General-purpose EC2 instances are designed to provide a balanced mix of compute (CPU), memory (RAM), and networking capacity. They are versatile and suitable for workloads that do not require specialized emphasis on any one of these dimensions. These instances are AWS’s go-to choice when you need reliable performance across a broad set of tasks.
+
+In AWS parlance, General-Purpose means you don’t pay for extreme performance in compute or memory alone — instead, you get a well-rounded resource profile that works well for most applications.
+
+🧠 Why They Matter
+
+General-purpose instances are:
+
+Balanced: CPU, memory, and network are sized to work together efficiently.
+
+Cost-effective: You avoid over-provisioning one resource at the expense of others.
+
+Flexible: Suitable for many real-world production workloads.
+
+These qualities make them excellent for applications where you don’t know exactly which resource might become the bottleneck — in contrast to compute-optimized or memory-optimized instances.
+
+🧱 Main Families (General-Purpose) & Key Traits
+📍 T Series – Burstable Performance
+
+Examples: T2, T3, T3a, T4g
+
+Designed for workloads with variable CPU usage — light usage most of the time, occasional spikes.
+
+Uses a CPU credit system:
+
+Earn credits when idle
+
+Spend credits during bursts beyond baseline CPU
+
+Can run at high CPU for short bursts without paying for expensive always-on CPU capacity
+
+Good for:
+
+Small/medium websites
+
+Microservices
+
+Development/testing environments
+
+Code repos and CI/CD runners
+
+How T Series works:
+T instances accumulate CPU credits at a baseline rate; when workloads exceed that baseline, they use the credits to “burst” higher. This makes them both economical and responsive for workloads with unpredictable demand.
+
+📍 M Series – Fixed, Balanced Performance
+
+Examples: M5, M6g, M6i, M7g (and variants with ‘d’, ‘n’, etc.)
+
+Not burstable — they deliver consistent performance based on instance size.
+
+Excellent for general enterprise workloads that need a steady balance of CPU + memory.
+
+Some variants include:
+
+d → local NVMe SSD storage (fast local disk)
+
+n → enhanced networking
+
+a → AMD processors (cost-optimized)
+
+g → Graviton (ARM) high price-performance ›
+
+Typical use cases for M series:
+
+Web & application servers
+
+Small/medium databases
+
+Enterprise applications (e.g., customer apps, backend services)
+
+Caching fleets & cluster computing
+
+
