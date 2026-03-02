@@ -220,32 +220,6 @@ Code repos and CI/CD runners
 How T Series works:
 T instances accumulate CPU credits at a baseline rate; when workloads exceed that baseline, they use the credits to “burst” higher. This makes them both economical and responsive for workloads with unpredictable demand.
 
-📍 M Series – Fixed, Balanced Performance
 
-Examples: M5, M6g, M6i, M7g (and variants with ‘d’, ‘n’, etc.)
-
-Not burstable — they deliver consistent performance based on instance size.
-
-Excellent for general enterprise workloads that need a steady balance of CPU + memory.
-
-Some variants include:
-
-d → local NVMe SSD storage (fast local disk)
-
-n → enhanced networking
-
-a → AMD processors (cost-optimized)
-
-g → Graviton (ARM) high price-performance ›
-
-Typical use cases for M series:
-
-Web & application servers
-
-Small/medium databases
-
-Enterprise applications (e.g., customer apps, backend services)
-
-Caching fleets & cluster computing
 
 
