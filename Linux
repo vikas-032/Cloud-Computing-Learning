@@ -1,1 +1,27 @@
 Basics Questions related to Linux
+
+What is Linux?
+
+Who created Linux?
+
+What is the Linux Kernel?
+
+What are the main components of Linux?
+
+What is a Linux distribution?
+
+What is the difference between Linux and Unix?
+
+What is the Shell in Linux?
+
+What is Bash?
+
+What is CLI (Command Line Interface)?
+
+What is the root user?
+
+
+pwd        # show current directory
+ls         # list files
+cd folder  # change directory
+mkdir test # create directory
