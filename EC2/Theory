@@ -77,7 +77,6 @@ your instance may be interrupted. This might not pose any issues for your backgr
 
 
 
-******
 Dedicated Hosts are physical servers with Amazon EC2 instance capacity that is fully dedicated to your use. 
 
 You can use your existing per-socket, per-core, or per-VM software licenses to help maintain license compliance.
