@@ -213,9 +213,6 @@ Your Name
 GitHub: https://github.com/username  
 LinkedIn: https://linkedin.com/in/yourprofile
 
-Amazon VPC , Internet Compute 
-
-NAT Natwork stands for address Translators
 
 
 
