@@ -1,1 +1,203 @@
 
+
+What is EBS?
+
+Amazon Elastic Block Store (EBS) is a persistent block storage service used with virtual machines (EC2 instances).
+
+EBS is like a virtual hard disk attached to an EC2 server.
+
+You attach EBS to an EC2 instance
+Store OS, applications, databases, files
+It behaves like a local hard drive in a computer
+
+
+Real-Life Analogy
+
+Think of:
+
+EC2 Instance → Computer
+EBS → Hard Disk (SSD/HDD)
+
+Without EBS:
+
+EC2 has no permanent storage
+
+With EBS:
+
+You can store files, OS, logs, databases safely.
+⚙️ Key Features of EBS
+1️⃣ Persistent Storage (Most Important)
+
+Data remains safe even if:
+
+EC2 stops
+EC2 reboots
+
+Unlike temporary storage.
+
+👉 That’s why it's called persistent storage.
+
+2️⃣ High Performance Storage
+
+EBS provides:
+
+Low latency
+High-speed read/write
+Suitable for databases
+
+Common workloads:
+
+MySQL
+PostgreSQL
+MongoDB
+Enterprise applications
+3️⃣ Snapshots (Backup System)
+
+You can create:
+
+👉 Snapshots = Backups
+
+Snapshots:
+
+Save current data state
+Stored in Amazon S3
+Can restore data anytime
+
+Use cases:
+
+Backup recovery
+Disaster recovery
+Clone volumes
+4️⃣ Scalability (Elastic Nature)
+
+You can:
+
+Increase storage size
+Increase IOPS
+Change performance level
+
+Without stopping the server.
+
+This feature is called:
+
+👉 Elastic Volumes
+
+5️⃣ Data Safety (Replication)
+
+EBS automatically:
+
+Replicates data across servers
+Inside one Availability Zone
+
+So data is not lost if hardware fails.
+
+📊 Types of EBS Volumes
+
+There are 2 main categories:
+
+🔹 SSD-Based Volumes (Fast)
+
+Used for:
+
+Databases
+Boot volumes
+Applications
+
+Types:
+
+Type	Use Case
+gp3	General purpose (most common)
+gp2	Older general purpose
+io1 / io2	High-performance workloads
+🔹 HDD-Based Volumes (Cheap Storage)
+
+Used for:
+
+Big data
+Logs
+Data warehouses
+
+Types:
+
+Type	Use Case
+st1	Throughput optimized
+sc1	Cold storage
+
+These volume types allow cost vs performance optimization.
+
+🧱 Components of EBS
+
+There are 2 major components:
+
+1️⃣ EBS Volume
+
+Actual storage disk.
+
+Example:
+
+Volume size: 20 GB
+Type: gp3
+Attached to: EC2 instance
+
+Used for:
+
+OS installation
+Database storage
+File storage
+2️⃣ EBS Snapshot
+
+Backup of volume.
+
+Example:
+
+Snapshot: Backup of 20GB volume
+Stored in: S3
+
+Used for:
+
+Backup
+Restore
+Clone server
+🔄 How EBS Works (Step-by-Step)
+
+Typical workflow:
+
+Launch EC2 instance
+Attach EBS volume
+Install OS on volume
+Store files & applications
+Create snapshots for backup
+⚖️ EBS vs Other AWS Storage
+
+Very important for interviews.
+
+Feature	EBS	S3	EFS
+Type	Block	Object	File
+Use	EC2 storage	File storage	Shared storage
+Mount	One instance	Not mounted	Multiple instances
+Persistence	Yes	Yes	Yes
+🧪 Common Use Cases
+
+You will use EBS in:
+
+💾 Database Storage
+MySQL
+PostgreSQL
+Oracle
+🖥️ Operating System Storage
+Linux OS
+Windows OS
+📁 File Systems
+Application files
+Logs
+🧰 DevOps Systems
+CI/CD pipelines
+Container storage
+🚫 Limitations of EBS
+
+Important for exams/interviews.
+
+Attached to one Availability Zone
+Usually attached to one EC2 at a time
+Costs based on allocated storage
+Cannot be accessed from multiple AZs directly
