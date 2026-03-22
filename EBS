@@ -195,9 +195,5 @@ CI/CD pipelines
 Container storage
 🚫 Limitations of EBS
 
-Important for exams/interviews.
 
-Attached to one Availability Zone
-Usually attached to one EC2 at a time
-Costs based on allocated storage
-Cannot be accessed from multiple AZs directly
+
