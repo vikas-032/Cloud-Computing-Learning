@@ -1,0 +1,231 @@
+
+CI/CD stands for Continuous Integration and Continuous Delivery/Continuous Deployment. It is a DevOps practice that automates the process of building, testing, and deploying software so that code changes can be released quickly and reliably. It is widely used with tools like GitHub, GitLab, Jenkins, Docker, and Kubernetes.
+
+1. Continuous Integration (CI)
+
+Continuous Integration is the practice where developers frequently merge their code changes into a shared repository. Each change triggers an automated build and test process.
+
+Workflow of CI
+
+Developer writes code.
+
+Code is pushed to a repository (e.g., GitHub).
+
+CI tool (like Jenkins or GitHub Actions) detects the change.
+
+The system automatically:
+
+Builds the project
+
+Runs automated tests
+
+Checks code quality
+
+If tests pass → code is merged.
+
+Example CI Pipeline
+Developer → Push Code → GitHub Repo
+                     ↓
+                 CI Tool
+                     ↓
+      Build → Run Tests → Code Analysis
+                     ↓
+                 Pass / Fail
+Benefits of CI
+
+Detects bugs early
+
+Faster development
+
+Better collaboration
+
+Automated testing
+
+Stable codebase
+
+2. Continuous Delivery (CD)
+
+Continuous Delivery means the application is always ready for deployment. After CI completes, the system prepares the code for release automatically.
+
+However, deployment to production still requires manual approval.
+
+Steps
+
+CI builds and tests the application.
+
+Artifacts are created (Docker image, build package).
+
+Application is deployed automatically to:
+
+staging
+
+testing environments
+
+Manual approval → Production deployment.
+
+Example
+Code Push
+   ↓
+CI Pipeline
+   ↓
+Build + Test
+   ↓
+Deploy to Staging
+   ↓
+Manual Approval
+   ↓
+Production
+3. Continuous Deployment
+
+Continuous Deployment is more advanced than Continuous Delivery.
+
+In this case, every successful code change automatically goes to production without manual approval.
+
+Flow
+Developer → Push Code
+       ↓
+CI Pipeline
+       ↓
+Build + Test
+       ↓
+Auto Deploy to Production
+Benefits
+
+Very fast release cycles
+
+Less manual work
+
+Immediate feature delivery
+
+Risk
+
+Requires very strong automated testing.
+
+4. CI/CD Pipeline Architecture
+
+A CI/CD pipeline is a sequence of automated steps.
+
+Typical stages:
+
+Source Stage
+
+Code stored in Git repository
+
+Example: GitHub
+
+Build Stage
+
+Compile source code
+
+Create artifacts
+
+Test Stage
+
+Unit tests
+
+Integration tests
+
+Security tests
+
+Package Stage
+
+Create containers using Docker
+
+Deploy Stage
+
+Deploy on servers or containers
+
+Example orchestrator: Kubernetes
+
+5. Popular CI/CD Tools
+CI Tools
+
+Jenkins
+
+GitHub Actions
+
+CircleCI
+
+Travis CI
+
+CD Tools
+
+Argo CD
+
+Spinnaker
+
+AWS CodeDeploy
+
+Container Tools
+
+Docker
+
+Kubernetes
+
+6. Example CI/CD Pipeline with GitHub
+
+Example using GitHub Actions:
+
+1. Developer pushes code
+2. GitHub Actions workflow triggers
+3. Code builds automatically
+4. Tests run
+5. Docker image created
+6. Image pushed to container registry
+7. Application deployed to cloud server
+7. CI/CD in Cloud Environments
+
+Cloud platforms provide built-in CI/CD services:
+
+AWS
+
+AWS CodePipeline
+
+AWS CodeBuild
+
+AWS CodeDeploy
+
+Azure
+
+Azure DevOps
+
+Google Cloud
+
+Google Cloud Build
+
+8. Real-World CI/CD Example
+
+Suppose a team is building a web application.
+
+Workflow:
+
+Developer writes code locally.
+
+Push to GitHub.
+
+CI tool runs:
+
+Build
+
+Test
+
+Docker image created using Docker.
+
+Image deployed to cluster managed by Kubernetes.
+
+Users access the updated application.
+
+9. Advantages of CI/CD
+
+✔ Faster releases
+✔ Reduced human error
+✔ Automated testing
+✔ Improved software quality
+✔ Faster bug detection
+
+10. Skills Needed for CI/CD (Cloud Engineer / DevOps)
+
+
+
+
+

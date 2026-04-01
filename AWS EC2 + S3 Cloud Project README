@@ -1,0 +1,225 @@
+AWS EC2 + S3 Cloud Project README
+
+# AWS Cloud Project – EC2 and S3 Integration
+
+## 📌 Description
+This project demonstrates deploying a virtual server on AWS EC2 and integrating it with S3 storage.
+
+---
+
+## 🔧 Services Used
+- Amazon EC2
+- Amazon S3
+- IAM
+- VPC
+- Security Groups
+
+---
+
+## 🏗️ Architecture
+Client → EC2 Instance → S3 Bucket
+
+---
+
+## 🚀 Implementation Steps
+1. Launch EC2 instance
+2. Configure IAM role for S3 access
+
+
+
+3. Create and attach S3 bucket
+4. Upload and retrieve data from EC2
+
+---
+
+## 🔐 Security
+- IAM role-based access
+- SSH key authentication
+- Restricted inbound rules
+
+---
+
+## 📊 Results
+- Secure data storage using S3
+- Reliable compute using EC2
+- Cloud-native architecture
+
+---
+
+
+## 🧠 Skills Gained
+- EC2 provisioning
+- IAM role configuration
+- Cloud storage integration
+
+
+
+# AWS Cloud Project – EC2 and S3 Integration
+
+## 📌 Description
+This project demonstrates deploying a virtual server on AWS EC2 and integrating it with S3 storage.
+
+---
+
+## 🔧 Services Used
+- Amazon EC2
+- Amazon S3
+- IAM
+- VPC
+- Security Groups
+
+---
+
+## 🏗️ Architecture
+Client → EC2 Instance → S3 Bucket
+
+---
+
+## 🚀 Implementation Steps
+1. Launch EC2 instance
+2. Configure IAM role for S3 access
+3. Create and attach S3 bucket
+4. Upload and retrieve data from EC2
+
+---
+
+## 🔐 Security
+- IAM role-based access
+- SSH key authentication
+- Restricted inbound rules
+
+---
+
+## 📊 Results
+- Secure data storage using S3
+- Reliable compute using EC2
+- Cloud-native architecture
+
+---
+
+## 🧠 Skills Gained
+- EC2 provisioning
+- IAM role configuration
+- Cloud storage integrati
+
+EC2 Amazon Elastic compute cloud
+
+
+AWS IAM (Identity and Access Management) is the AWS service used to securely control who can access your 
+AWS resources and what they can do with them. It’s core to AWS security and access governance.
+
+What IAM Does
+
+Authentication & Authorization: IAM manages who can sign in (authenticate) and what actions they are allowed to perform (authorize) across AWS services.
+
+Centralized Control: You define identities (users, groups, roles) and permissions policies that determine access to AWS resources.
+
+Least Privilege: You can grant fine-grained permissions so identities only get the access they actually need. 
+
+
+
+1) What Are EC2 Instance Types?
+
+EC2 instance types are configurations of virtual hardware (CPU, memory, storage, network) designed for different workloads. Each type is grouped into a family based on the resources it prioritizes. When you launch an instance, the selected type determines the underlying hardware resources your virtual machine gets.
+
+🧠 2) Main Categories of EC2 Instance Types
+
+Here are the primary families you should know:
+
+📌 1. General-Purpose Instances
+
+Provide a balanced mix of CPU, memory, and networking.
+
+Suitable for web servers, small/medium databases, development/test environments.
+
+Examples: t2, t3, t3a, t4g, m5, m6g, m7i
+
+T-series (t2/t3/t4g): Burstable performance — good baseline CPU with the ability to "burst" above it.
+M-series (m5/m6/m7): Balanced, fixed-performance general-purpose.
+
+📈 2. Compute-Optimized Instances
+
+Designed for CPU-intensive workloads needing high processing power.
+
+Use cases: batch processing, high-performance web servers, media transcoding.
+
+Examples: c5, c6g, c7g, c8gn
+
+🧠 3. Memory-Optimized Instances
+
+Offer large RAM footprints for memory-intensive applications.
+
+Use cases: in-memory databases, big data analytics, caching.
+
+Examples: r5, r6g, r7i, x1, x2idn, z1d, High-Memory families
+
+⚡ 4. Accelerated Computing Instances
+
+Include hardware accelerators like GPUs or custom chips.
+
+Use cases: machine learning, graphics processing, inference tasks.
+
+Examples: p4d, g5, inf1, trn1, f1
+
+💾 5. Storage-Optimized Instances
+
+Optimized for high, low-latency local storage operations.
+
+Use cases: high-throughput databases, big data workloads requiring heavy disk I/O.
+
+Examples: i3, i4i, d3, h1, i7i
+
+🚀 6. High-Performance Computing (HPC) Instances
+
+Tailored for large-scale compute clusters and complex simulations.
+
+Examples: hpc6a, hpc7a, hpc7g
+What General-Purpose Instances Are
+
+General-purpose EC2 instances are designed to provide a balanced mix of compute (CPU), memory (RAM), and networking capacity. They are versatile and suitable for workloads that do not require specialized emphasis on any one of these dimensions. These instances are AWS’s go-to choice when you need reliable performance across a broad set of tasks.
+
+In AWS parlance, General-Purpose means you don’t pay for extreme performance in compute or memory alone — instead, you get a well-rounded resource profile that works well for most applications.
+
+🧠 Why They Matter
+
+General-purpose instances are:
+
+Balanced: CPU, memory, and network are sized to work together efficiently.
+
+Cost-effective: You avoid over-provisioning one resource at the expense of others.
+
+Flexible: Suitable for many real-world production workloads.
+
+These qualities make them excellent for applications where you don’t know exactly which resource might become the bottleneck — in contrast to compute-optimized or memory-optimized instances.
+
+🧱 Main Families (General-Purpose) & Key Traits
+📍 T Series – Burstable Performance
+
+Examples: T2, T3, T3a, T4g
+
+Designed for workloads with variable CPU usage — light usage most of the time, occasional spikes.
+
+Uses a CPU credit system:
+
+Earn credits when idle
+
+Spend credits during bursts beyond baseline CPU
+
+Can run at high CPU for short bursts without paying for expensive always-on CPU capacity
+
+Good for:
+
+Small/medium websites
+
+Microservices
+
+Development/testing environments
+
+Code repos and CI/CD runners
+
+How T Series works:
+T instances accumulate CPU credits at a baseline rate; when workloads exceed that baseline, they use the credits to “burst” higher. This makes them both economical and responsive for workloads with unpredictable demand.
+
+
+
+
