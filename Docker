@@ -1,1 +1,1732 @@
+# Docker Complete Guide: Concepts, Interview Questions & Real-World Implementation
 
+## Table of Contents
+1. Docker Fundamentals
+2. Core Concepts
+3. Docker Architecture
+4. Common Docker Commands
+5. Dockerfile Deep Dive
+6. Docker Compose
+7. Interview Questions & Answers
+8. Real-World Examples & Implementation
+9. Best Practices
+10. Troubleshooting
+
+---
+
+## 1. DOCKER FUNDAMENTALS
+
+### What is Docker?
+Docker is a containerization platform that allows you to package applications with all their dependencies (libraries, runtime, code) into a standardized unit called a **container**. These containers run consistently across different environments.
+
+### Why Docker?
+- **Consistency**: "It works on my machine" problem is solved
+- **Isolation**: Dependencies don't conflict
+- **Scalability**: Easy to scale horizontally
+- **Efficiency**: Lightweight compared to VMs
+- **CI/CD**: Seamless integration with deployment pipelines
+- **Portability**: Works on Linux, Windows, Mac
+
+### Docker vs Virtual Machines
+
+| Feature | Docker | VM |
+|---------|--------|-----|
+| Size | 10-100 MB | 1-3 GB |
+| Boot Time | Seconds | Minutes |
+| Performance | Near-native | Slower |
+| Isolation | Process-level | Hardware-level |
+| Density | 1000s per host | 10s per host |
+
+---
+
+## 2. CORE CONCEPTS
+
+### Image
+- Blueprint/template for creating containers
+- Read-only file system
+- Contains: OS, runtime, libraries, code, environment variables
+- Stored in registries (Docker Hub, ECR, GCR)
+
+```bash
+# Image is like a class
+docker image ls
+docker pull ubuntu:20.04
+docker build -t my-app:1.0 .
+```
+
+### Container
+- Running instance of an image
+- Writable layer on top of image
+- Isolated process environment
+- Can be started, stopped, deleted
+
+```bash
+# Container is like an object/instance
+docker run -d --name my-container my-app:1.0
+docker ps
+docker logs my-container
+```
+
+### Registry
+- Repository for storing images
+- Public: Docker Hub, GitHub Container Registry
+- Private: AWS ECR, Azure ACR, Artifactory
+
+### Layer
+- Docker images are built in layers
+- Each instruction in Dockerfile creates a layer
+- Layers are cached for faster rebuilds
+- Only changed layers are rebuilt
+
+```
+Dockerfile:
+FROM ubuntu:20.04          # Layer 1: Base image
+RUN apt-get update         # Layer 2: System updates
+RUN apt-get install python # Layer 3: Python installation
+COPY app.py /app/          # Layer 4: Copy application
+CMD ["python", "app.py"]   # Layer 5: Default command
+```
+
+### Volumes
+- Persistent data storage
+- Survive container deletion
+- Can be shared between containers
+- Three types: Named volumes, Bind mounts, tmpfs
+
+```bash
+# Named volume
+docker run -v my-data:/data my-app
+
+# Bind mount
+docker run -v /host/path:/container/path my-app
+
+# tmpfs mount (in-memory)
+docker run --tmpfs /tmp my-app
+```
+
+### Networks
+- Enable container-to-container communication
+- Bridge network (default, isolated)
+- Host network (shares host network)
+- Overlay network (for swarm/Kubernetes)
+
+```bash
+docker network create my-network
+docker run --network my-network --name service1 my-app
+docker run --network my-network --name service2 my-app
+# service1 can communicate with service2 using hostname
+```
+
+---
+
+## 3. DOCKER ARCHITECTURE
+
+```
+┌─────────────────────────────────────────────────────┐
+│              Docker Host (Linux OS)                  │
+├─────────────────────────────────────────────────────┤
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
+│  │Container │  │Container │  │Container │          │
+│  │    1     │  │    2     │  │    3     │          │
+│  └──────────┘  └──────────┘  └──────────┘          │
+├─────────────────────────────────────────────────────┤
+│         Docker Engine (Daemon)                       │
+│  - Container Runtime (containerd/runc)              │
+│  - Image Management                                 │
+│  - Network Management                               │
+├─────────────────────────────────────────────────────┤
+│         Linux Kernel                                │
+│  - Namespaces (Isolation)                          │
+│  - Cgroups (Resource Limits)                       │
+│  - UnionFS (Layered Filesystem)                    │
+└─────────────────────────────────────────────────────┘
+```
+
+### Key Components:
+1. **Docker Client**: CLI tool for user interaction
+2. **Docker Daemon**: Background process managing containers
+3. **containerd**: Container runtime
+4. **runc**: Low-level runtime
+5. **Registries**: Image storage
+6. **Images**: Templates
+7. **Containers**: Running instances
+
+---
+
+## 4. COMMON DOCKER COMMANDS
+
+### Image Management
+```bash
+# Pull image from registry
+docker pull ubuntu:20.04
+
+# List local images
+docker images
+docker image ls
+
+# Build image from Dockerfile
+docker build -t myapp:1.0 .
+docker build -t myapp:1.0 -f Dockerfile.prod .
+
+# Tag image
+docker tag myapp:1.0 myapp:latest
+docker tag myapp:1.0 gcr.io/project/myapp:1.0
+
+# Push to registry
+docker push gcr.io/project/myapp:1.0
+
+# Remove image
+docker rmi myapp:1.0
+
+# View image history/layers
+docker history myapp:1.0
+
+# Inspect image details
+docker inspect myapp:1.0
+```
+
+### Container Management
+```bash
+# Run container
+docker run -d --name mycontainer -p 8080:80 myapp:1.0
+
+# Options:
+# -d: detached (background)
+# -i: interactive
+# -t: terminal (pseudo-TTY)
+# --name: container name
+# -p: port mapping (host:container)
+# -e: environment variable
+# -v: volume mount
+# --network: specify network
+# --restart: restart policy (no, always, unless-stopped, on-failure)
+
+# List running containers
+docker ps
+
+# List all containers (running + stopped)
+docker ps -a
+
+# View container logs
+docker logs mycontainer
+docker logs -f mycontainer  # follow logs
+docker logs --tail 100 mycontainer
+
+# Execute command in running container
+docker exec -it mycontainer bash
+docker exec -u root mycontainer apt-get update
+
+# Stop container
+docker stop mycontainer
+
+# Kill container (force stop)
+docker kill mycontainer
+
+# Start stopped container
+docker start mycontainer
+
+# Restart container
+docker restart mycontainer
+
+# Remove container
+docker rm mycontainer
+
+# View container stats
+docker stats mycontainer
+
+# Inspect container
+docker inspect mycontainer
+```
+
+### Network Management
+```bash
+# Create network
+docker network create my-network
+
+# List networks
+docker network ls
+
+# Inspect network
+docker network inspect my-network
+
+# Connect container to network
+docker network connect my-network mycontainer
+
+# Disconnect
+docker network disconnect my-network mycontainer
+
+# Remove network
+docker network rm my-network
+```
+
+### Volume Management
+```bash
+# Create named volume
+docker volume create my-data
+
+# List volumes
+docker volume ls
+
+# Inspect volume
+docker volume inspect my-data
+
+# Remove volume
+docker volume rm my-data
+
+# Remove unused volumes
+docker volume prune
+```
+
+### System Commands
+```bash
+# Show disk usage
+docker system df
+
+# Remove unused images/containers/networks
+docker system prune
+
+# View Docker info
+docker info
+
+# Cleanup dangling images
+docker image prune
+```
+
+---
+
+## 5. DOCKERFILE DEEP DIVE
+
+### Basic Structure
+```dockerfile
+# Specify base image
+FROM python:3.9-slim
+
+# Set working directory
+WORKDIR /app
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+
+# Copy files from host to container
+COPY requirements.txt .
+
+# Run commands (build-time)
+RUN pip install -r requirements.txt
+
+# Expose port (documentation)
+EXPOSE 8000
+
+# Create non-root user for security
+RUN useradd -m appuser
+USER appuser
+
+# Copy application code
+COPY app.py .
+
+# Set the default command
+CMD ["python", "app.py"]
+
+# Alternative: ENTRYPOINT makes it more flexible
+ENTRYPOINT ["python"]
+CMD ["app.py"]
+```
+
+### Best Practices
+
+#### 1. Use Specific Base Image Tags
+```dockerfile
+# ❌ Bad: Uses latest, unpredictable
+FROM python:latest
+
+# ✅ Good: Specific version, reproducible
+FROM python:3.9.13-slim-bullseye
+```
+
+#### 2. Minimize Layers
+```dockerfile
+# ❌ Bad: Creates 3 layers
+RUN apt-get update
+RUN apt-get install -y curl
+RUN apt-get install -y git
+
+# ✅ Good: Creates 1 layer
+RUN apt-get update && apt-get install -y \
+    curl \
+    git && \
+    rm -rf /var/lib/apt/lists/*
+```
+
+#### 3. Leverage Build Cache
+```dockerfile
+# Put frequently changing commands last
+FROM python:3.9
+
+# Dependencies rarely change
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Code changes frequently
+COPY app.py .
+```
+
+#### 4. Use .dockerignore
+```
+# .dockerignore file
+*.pyc
+__pycache__
+.git
+.gitignore
+.env
+.DS_Store
+node_modules
+.pytest_cache
+.coverage
+venv/
+```
+
+#### 5. Multi-Stage Build (Reduce Image Size)
+```dockerfile
+# Build stage
+FROM python:3.9 AS builder
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --user -r requirements.txt
+
+# Runtime stage (smaller)
+FROM python:3.9-slim
+WORKDIR /app
+COPY --from=builder /root/.local /root/.local
+COPY app.py .
+ENV PATH=/root/.local/bin:$PATH
+CMD ["python", "app.py"]
+```
+
+#### 6. Non-Root User
+```dockerfile
+FROM ubuntu:20.04
+
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
+RUN chown -R appuser:appgroup /app
+
+USER appuser
+CMD ["/app/entrypoint.sh"]
+```
+
+#### 7. Health Checks
+```dockerfile
+FROM python:3.9
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8000/health')"
+
+CMD ["python", "app.py"]
+```
+
+### Common Dockerfile Instructions
+
+| Instruction | Purpose |
+|------------|---------|
+| FROM | Base image |
+| WORKDIR | Set working directory |
+| COPY | Copy files from host |
+| ADD | Copy files + auto-extract archives |
+| RUN | Execute commands during build |
+| ENV | Set environment variables |
+| ARG | Build-time arguments |
+| EXPOSE | Document exposed ports |
+| CMD | Default command |
+| ENTRYPOINT | Configure container as executable |
+| USER | Run as specific user |
+| VOLUME | Create mount point |
+| LABEL | Metadata |
+| HEALTHCHECK | Health check script |
+
+---
+
+## 6. DOCKER COMPOSE
+
+Docker Compose allows you to define and run multi-container applications using a YAML file.
+
+### Basic Structure
+```yaml
+version: '3.8'
+
+services:
+  # Service 1: Web Application
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/mydb
+      - REDIS_URL=redis://cache:6379
+    volumes:
+      - ./app:/app
+      - ./logs:/var/log/app
+    depends_on:
+      - db
+      - cache
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Service 2: Database
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mydb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+    ports:
+      - "5432:5432"
+
+  # Service 3: Cache
+  cache:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - cache-data:/data
+    networks:
+      - app-network
+
+  # Service 4: Message Queue
+  queue:
+    image: rabbitmq:3.9-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+  cache-data:
+
+networks:
+  app-network:
+    driver: bridge
+```
+
+### Common Docker Compose Commands
+```bash
+# Start all services
+docker-compose up
+
+# Start in detached mode
+docker-compose up -d
+
+# Build images
+docker-compose build
+
+# View logs
+docker-compose logs
+docker-compose logs -f web  # follow specific service
+
+# Execute command
+docker-compose exec web bash
+
+# Stop all services
+docker-compose down
+
+# Remove volumes too
+docker-compose down -v
+
+# Rebuild specific service
+docker-compose up -d --build web
+
+# View service status
+docker-compose ps
+
+# Validate configuration
+docker-compose config
+```
+
+---
+
+## 7. INTERVIEW QUESTIONS & ANSWERS
+
+### Beginner Level
+
+**Q1: What is Docker and why is it used?**
+
+A: Docker is a containerization platform that packages applications with their dependencies into containers. It's used because:
+- Ensures consistency across environments
+- Reduces "works on my machine" problems
+- Improves application portability
+- Enables efficient resource utilization
+- Facilitates CI/CD pipelines
+- Simplifies scaling and deployment
+
+---
+
+**Q2: What's the difference between an image and a container?**
+
+A: 
+- **Image**: Read-only template/blueprint. Think of it as a class definition.
+- **Container**: Running instance of an image. Think of it as an object/instance of a class.
+
+```bash
+docker build -t my-app:1.0 .      # Creates image
+docker run my-app:1.0             # Creates and runs container
+```
+
+---
+
+**Q3: Explain Docker layers and why they matter.**
+
+A: 
+- Each Dockerfile instruction creates a layer
+- Layers are stacked to form the final image
+- Benefits:
+  - **Caching**: Unchanged layers are cached, speeding up builds
+  - **Efficiency**: Shared layers between images save storage
+  - **Reusability**: Base layers can be shared
+  
+```dockerfile
+FROM ubuntu:20.04      # Layer 1
+RUN apt-get update     # Layer 2 (cached)
+COPY app.py /app/      # Layer 3 (rebuilt if app.py changes)
+```
+
+---
+
+**Q4: What is a volume in Docker?**
+
+A: 
+A volume is a mechanism for persisting data generated by containers. Types:
+- **Named volumes**: Managed by Docker, stored in Docker's data directory
+- **Bind mounts**: Direct mapping of host directory to container
+- **tmpfs**: In-memory storage (temporary)
+
+```bash
+docker run -v my-data:/data my-app          # Named volume
+docker run -v /host/path:/container/path my-app  # Bind mount
+```
+
+---
+
+**Q5: What is a Dockerfile?**
+
+A: 
+A text file containing instructions to build a Docker image. Contains:
+- Base image (FROM)
+- Environment setup (RUN, ENV)
+- File copying (COPY)
+- Port exposure (EXPOSE)
+- Startup command (CMD/ENTRYPOINT)
+
+---
+
+### Intermediate Level
+
+**Q6: Explain the difference between CMD and ENTRYPOINT.**
+
+A:
+```dockerfile
+# CMD: Can be overridden from command line
+FROM ubuntu
+CMD ["echo", "hello"]
+
+# docker run image → outputs "hello"
+# docker run image echo "bye" → outputs "bye" (overridden)
+
+# ENTRYPOINT: Cannot be overridden, parameters can be passed
+FROM ubuntu
+ENTRYPOINT ["echo"]
+CMD ["hello"]
+
+# docker run image → outputs "hello"
+# docker run image "bye" → outputs "bye" (parameter passed)
+```
+
+Best practice: Use ENTRYPOINT for the main command, CMD for default parameters.
+
+---
+
+**Q7: How do you optimize Docker image size?**
+
+A:
+1. **Use minimal base image**: `python:3.9-slim` instead of `python:3.9`
+2. **Multi-stage builds**: Separate build and runtime stages
+3. **Minimize layers**: Combine RUN commands
+4. **Remove package manager cache**: `rm -rf /var/lib/apt/lists/*`
+5. **Use .dockerignore**: Exclude unnecessary files
+6. **Alpine Linux**: Extremely lightweight base image
+
+```dockerfile
+# ❌ Bad (900MB)
+FROM python:3.9
+RUN pip install numpy pandas tensorflow
+
+# ✅ Good (200MB)
+FROM python:3.9-slim
+RUN pip install --no-cache-dir numpy pandas tensorflow
+```
+
+---
+
+**Q8: What are Docker networks and why are they important?**
+
+A:
+Networks enable container-to-container communication and isolation.
+
+Types:
+- **bridge**: Default, isolated network
+- **host**: Container shares host network stack
+- **overlay**: For swarm/Kubernetes clusters
+- **none**: No network
+
+Importance:
+- Containers can discover each other by hostname
+- Isolates traffic between application tiers
+- Enables microservices architecture
+
+```bash
+docker network create backend
+docker run --network backend --name db postgres
+docker run --network backend --name app myapp
+# app can reach db using hostname: postgresql://db:5432/
+```
+
+---
+
+**Q9: Explain Docker Compose and when to use it.**
+
+A:
+Docker Compose defines and runs multi-container applications using YAML files.
+
+When to use:
+- **Development**: Spin up complete dev environment instantly
+- **Testing**: Integration testing with multiple services
+- **Local setup**: Replicate production locally
+- **Small deployments**: Perfect for small applications
+
+```bash
+docker-compose up -d
+# Starts web, database, cache, queue with one command
+```
+
+---
+
+**Q10: What's the difference between COPY and ADD in Dockerfile?**
+
+A:
+```dockerfile
+# COPY: Simple file copying from host to container
+COPY app.py /app/
+
+# ADD: Can copy + extract archives, download from URLs
+ADD archive.tar.gz /app/
+ADD https://example.com/file.zip /app/
+```
+
+Best practice: Use COPY unless you need ADD's features.
+
+---
+
+### Advanced Level
+
+**Q11: How do you handle secrets in Docker?**
+
+A:
+```dockerfile
+# ❌ Bad: Secrets in image (insecure)
+FROM ubuntu
+ENV DATABASE_PASSWORD=secret123
+RUN echo $DATABASE_PASSWORD
+
+# ✅ Good: Runtime secrets
+docker run -e DATABASE_PASSWORD="secret123" myapp
+
+# ✅ Better: Using .env file
+docker run --env-file .env myapp
+
+# ✅ Best: Docker Secrets (Swarm/K8s)
+docker secret create db_password secret.txt
+docker service create \
+  --secret db_password \
+  --secret-target /run/secrets/db_password \
+  myapp
+```
+
+---
+
+**Q12: What is a health check and how do you implement it?**
+
+A:
+Health checks verify container is running correctly.
+
+```dockerfile
+FROM python:3.9
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8000/health').raise_for_status()"
+```
+
+Usage:
+```bash
+docker ps  # Shows (healthy) or (unhealthy)
+docker inspect mycontainer | grep Health
+```
+
+---
+
+**Q13: Explain multi-stage builds and their benefits.**
+
+A:
+Multi-stage builds use multiple FROM statements to reduce final image size.
+
+```dockerfile
+# Stage 1: Builder
+FROM golang:1.19 AS builder
+WORKDIR /app
+COPY . .
+RUN go build -o app main.go
+
+# Stage 2: Runtime (only ~10MB)
+FROM alpine:3.17
+COPY --from=builder /app/app /
+ENTRYPOINT ["/app"]
+
+# Final image size: ~50MB (not 1GB with Go SDK)
+```
+
+Benefits:
+- Removes build tools from final image
+- Reduces security attack surface
+- Faster deployment
+
+---
+
+**Q14: How do you debug a Docker container?**
+
+A:
+```bash
+# View logs
+docker logs -f mycontainer
+
+# Execute interactive bash
+docker exec -it mycontainer bash
+
+# Inspect container details
+docker inspect mycontainer
+
+# View resource usage
+docker stats mycontainer
+
+# Check image history
+docker history myimage
+
+# Run privileged container for debugging
+docker run -it --privileged --pid=host ubuntu nsenter -t 1 -m -u -n -i bash
+
+# Use debugging container
+docker run --rm -it --volumes-from mycontainer alpine
+```
+
+---
+
+**Q15: How do you secure Docker containers?**
+
+A:
+1. **Run as non-root user**: Prevent privilege escalation
+2. **Use read-only filesystem**: `--read-only`
+3. **Limit resources**: `--memory`, `--cpus`
+4. **Don't use privileged mode**: Avoid `--privileged`
+5. **Scan images**: `docker scan myimage`
+6. **Use minimal base images**: Reduce vulnerabilities
+7. **Update regularly**: Keep base images current
+8. **Don't hardcode secrets**: Use environment variables or secrets
+9. **Restrict capabilities**: `--cap-drop=ALL`
+10. **Use network policies**: Isolate traffic
+
+```bash
+docker run -d \
+  --read-only \
+  --memory=512m \
+  --cpus=1 \
+  --user=appuser \
+  --cap-drop=ALL \
+  --cap-add=NET_BIND_SERVICE \
+  myapp:latest
+```
+
+---
+
+**Q16: Explain Docker networking in detail.**
+
+A:
+```
+Bridge Network (Default):
+┌─────────────────────────────────┐
+│     Docker Host                 │
+├─────────────────────────────────┤
+│  ┌─────────┐    ┌─────────┐   │
+│  │ Web     │    │ Database│   │
+│  │ 172.17. │◄──►│ 172.17. │   │
+│  │ 0.2     │    │ 0.3     │   │
+│  └─────────┘    └─────────┘   │
+│      │                 │       │
+│  docker0 (bridge)      │       │
+│  172.17.0.1            │       │
+└─────────────────────────────────┘
+         │
+    Host Network
+    192.168.1.100
+```
+
+Network drivers:
+- **bridge**: Default, each container isolated
+- **host**: Shares host network (no isolation)
+- **overlay**: Swarm/Kubernetes multi-host
+- **macvlan**: Assign MAC address
+
+```bash
+# Create custom bridge network
+docker network create --driver bridge backend
+
+# Containers on same network discover by name
+docker run --network backend --name web myapp
+docker run --network backend --name db postgres
+# web can reach db via "db:5432"
+```
+
+---
+
+**Q17: How do you implement CI/CD with Docker?**
+
+A:
+```yaml
+# .gitlab-ci.yml example
+stages:
+  - build
+  - test
+  - push
+  - deploy
+
+build:
+  stage: build
+  script:
+    - docker build -t myapp:$CI_COMMIT_SHA .
+    - docker build -t myapp:latest .
+
+test:
+  stage: test
+  script:
+    - docker run myapp:$CI_COMMIT_SHA pytest
+
+push:
+  stage: push
+  script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $REGISTRY
+    - docker push myapp:$CI_COMMIT_SHA
+    - docker push myapp:latest
+
+deploy:
+  stage: deploy
+  script:
+    - docker pull myapp:latest
+    - docker-compose up -d
+```
+
+---
+
+**Q18: What's the difference between Docker and Kubernetes?**
+
+A:
+| Feature | Docker | Kubernetes |
+|---------|--------|-----------|
+| Scope | Container runtime | Container orchestration |
+| Deployment | Single host | Multi-host clusters |
+| Scaling | Manual or Docker Swarm | Automatic |
+| Load balancing | Basic | Advanced |
+| Updates | Manual | Rolling updates |
+| Learning curve | Beginner | Advanced |
+| Use case | Dev, small apps | Production, large scale |
+
+---
+
+**Q19: How do you handle database migrations in Docker?**
+
+A:
+```dockerfile
+# Option 1: Init script
+FROM postgres:13
+COPY init.sql /docker-entrypoint-initdb.d/
+
+# Option 2: Entrypoint script
+FROM myapp
+COPY entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+```
+
+```bash
+#!/bin/bash
+# entrypoint.sh
+set -e
+
+# Wait for database
+until PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c '\q'; do
+  >&2 echo "Postgres is unavailable - sleeping"
+  sleep 1
+done
+
+# Run migrations
+python manage.py migrate
+
+# Start application
+exec "$@"
+```
+
+---
+
+**Q20: What are the common Docker gotchas and how to avoid them?**
+
+A:
+1. **PID 1 process doesn't handle signals**: Use exec form in CMD
+   ```dockerfile
+   CMD ["python", "app.py"]  # ✅ exec form
+   CMD python app.py         # ❌ shell form
+   ```
+
+2. **Running as root**: Creates security risks
+   ```dockerfile
+   RUN useradd -m appuser
+   USER appuser
+   ```
+
+3. **Not cleaning up package manager cache**: Increases image size
+   ```dockerfile
+   RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+   ```
+
+4. **Not setting working directory**: Files scattered in root
+   ```dockerfile
+   WORKDIR /app
+   ```
+
+5. **Not using .dockerignore**: Copies unnecessary files
+   ```
+   # .dockerignore
+   .git
+   node_modules
+   .env
+   ```
+
+6. **Hardcoding configuration**: Use environment variables
+   ```dockerfile
+   ENV APP_ENV=production  # ✅
+   RUN config=hardcoded    # ❌
+   ```
+
+---
+
+## 8. REAL-WORLD EXAMPLES & IMPLEMENTATION
+
+### Example 1: Python Flask API with PostgreSQL
+
+**Project Structure:**
+```
+flask-app/
+├── app.py
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── .dockerignore
+└── init.sql
+```
+
+**app.py:**
+```python
+from flask import Flask, jsonify
+from flask_sqlalchemy import SQLAlchemy
+import os
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'DATABASE_URL',
+    'postgresql://user:password@localhost:5432/mydb'
+)
+
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'healthy'}), 200
+
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    return jsonify([{'id': u.id, 'name': u.name} for u in users]), 200
+
+@app.route('/users', methods=['POST'])
+def create_user():
+    from flask import request
+    data = request.get_json()
+    user = User(name=data['name'])
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({'id': user.id, 'name': user.name}), 201
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(host='0.0.0.0', port=5000, debug=False)
+```
+
+**requirements.txt:**
+```
+Flask==2.3.0
+Flask-SQLAlchemy==3.0.0
+psycopg2-binary==2.9.6
+python-dotenv==1.0.0
+```
+
+**Dockerfile:**
+```dockerfile
+# Multi-stage build
+FROM python:3.11-slim as builder
+
+WORKDIR /tmp
+COPY requirements.txt .
+RUN pip install --user -r requirements.txt
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy Python dependencies from builder
+COPY --from=builder /root/.local /root/.local
+
+# Set environment variables
+ENV PATH=/root/.local/bin:$PATH
+ENV PYTHONUNBUFFERED=1
+ENV FLASK_APP=app.py
+
+# Create non-root user
+RUN useradd -m -u 1000 appuser
+USER appuser
+
+# Copy application
+COPY app.py .
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:5000/health').raise_for_status()" || exit 1
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]
+```
+
+**docker-compose.yml:**
+```yaml
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://user:password@db:5432/mydb
+    volumes:
+      - ./app.py:/app/app.py  # Hot reload in development
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+
+networks:
+  app-network:
+```
+
+**init.sql:**
+```sql
+CREATE TABLE IF NOT EXISTS "user" (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(80) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO "user" (name) VALUES ('Alice'), ('Bob');
+```
+
+**.dockerignore:**
+```
+__pycache__
+*.pyc
+.git
+.gitignore
+.env
+.DS_Store
+.pytest_cache
+venv/
+.coverage
+```
+
+**Usage:**
+```bash
+# Build and run
+docker-compose up -d
+
+# View logs
+docker-compose logs -f web
+
+# Access application
+curl http://localhost:5000/users
+
+# Scale services
+docker-compose up -d --scale web=3
+
+# Clean up
+docker-compose down -v
+```
+
+---
+
+### Example 2: Node.js Microservices with Redis and RabbitMQ
+
+**Project Structure:**
+```
+microservices/
+├── user-service/
+│   ├── index.js
+│   ├── Dockerfile
+│   └── package.json
+├── order-service/
+│   ├── index.js
+│   ├── Dockerfile
+│   └── package.json
+└── docker-compose.yml
+```
+
+**user-service/package.json:**
+```json
+{
+  "name": "user-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "redis": "^4.6.0",
+    "amqplib": "^0.10.0"
+  }
+}
+```
+
+**user-service/index.js:**
+```javascript
+const express = require('express');
+const redis = require('redis');
+const amqp = require('amqplib');
+
+const app = express();
+app.use(express.json());
+
+const redisClient = redis.createClient({
+  host: 'cache',
+  port: 6379
+});
+
+let channel;
+
+async function connectRabbitMQ() {
+  const connection = await amqp.connect('amqp://user:password@queue:5672');
+  channel = await connection.createChannel();
+  await channel.assertQueue('user_events');
+}
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'healthy' });
+});
+
+app.post('/users', async (req, res) => {
+  const { id, name } = req.body;
+  
+  // Store in Redis
+  await redisClient.setEx(`user:${id}`, 3600, JSON.stringify({ id, name }));
+  
+  // Publish event
+  await channel.sendToQueue(
+    'user_events',
+    Buffer.from(JSON.stringify({ event: 'user_created', id, name }))
+  );
+  
+  res.status(201).json({ id, name });
+});
+
+app.get('/users/:id', async (req, res) => {
+  const cached = await redisClient.get(`user:${req.params.id}`);
+  if (cached) {
+    return res.json(JSON.parse(cached));
+  }
+  res.status(404).json({ error: 'Not found' });
+});
+
+connectRabbitMQ().then(() => {
+  app.listen(3000, () => {
+    console.log('User service running on port 3000');
+  });
+});
+```
+
+**user-service/Dockerfile:**
+```dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY index.js .
+
+USER node
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+
+**docker-compose.yml:**
+```yaml
+version: '3.8'
+
+services:
+  user-service:
+    build: ./user-service
+    ports:
+      - "3001:3000"
+    depends_on:
+      - cache
+      - queue
+    environment:
+      - NODE_ENV=production
+    networks:
+      - microservices
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "3002:3000"
+    depends_on:
+      - cache
+      - queue
+      - user-service
+    environment:
+      - NODE_ENV=production
+    networks:
+      - microservices
+
+  cache:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - cache-data:/data
+    networks:
+      - microservices
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  queue:
+    image: rabbitmq:3.12-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    volumes:
+      - queue-data:/var/lib/rabbitmq
+    networks:
+      - microservices
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  cache-data:
+  queue-data:
+
+networks:
+  microservices:
+```
+
+---
+
+### Example 3: Django App with Celery, PostgreSQL, and Redis
+
+**Dockerfile:**
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PIP_NO_CACHE_DIR=1
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+RUN useradd -m -u 1000 appuser
+USER appuser
+
+COPY --chown=appuser:appuser . .
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD python -c "import requests; requests.get('http://localhost:8000/health/').raise_for_status()" || exit 1
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "config.wsgi:application"]
+```
+
+**docker-compose.yml:**
+```yaml
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: >
+      sh -c "python manage.py migrate &&
+             gunicorn --bind 0.0.0.0:8000 --workers 4 config.wsgi:application"
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=False
+      - DATABASE_URL=postgresql://user:password@db:5432/mydb
+      - REDIS_URL=redis://cache:6379
+      - CELERY_BROKER_URL=redis://cache:6379
+    volumes:
+      - .:/app
+      - static-volume:/app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  celery:
+    build: .
+    command: celery -A config worker -l info
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/mydb
+      - REDIS_URL=redis://cache:6379
+      - CELERY_BROKER_URL=redis://cache:6379
+    depends_on:
+      - db
+      - cache
+    networks:
+      - app-network
+
+  celery-beat:
+    build: .
+    command: celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/mydb
+      - REDIS_URL=redis://cache:6379
+      - CELERY_BROKER_URL=redis://cache:6379
+    depends_on:
+      - db
+      - cache
+    networks:
+      - app-network
+
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  cache:
+    image: redis:7-alpine
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - static-volume:/app/staticfiles
+    depends_on:
+      - web
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+  static-volume:
+
+networks:
+  app-network:
+```
+
+---
+
+## 9. BEST PRACTICES
+
+### 1. **Image Optimization**
+- Use specific base image tags
+- Multi-stage builds
+- Minimize layers
+- Clean up package caches
+- Use .dockerignore
+
+### 2. **Security**
+- Run as non-root user
+- Don't hardcode secrets
+- Use read-only filesystems
+- Scan images for vulnerabilities
+- Keep base images updated
+- Drop unnecessary capabilities
+
+### 3. **Performance**
+- Order Dockerfile commands (stable → changing)
+- Leverage build cache
+- Use Alpine for lightweight images
+- Optimize layer size
+- Use .dockerignore
+
+### 4. **Logging & Monitoring**
+- Log to stdout/stderr
+- Use Docker logging drivers
+- Implement health checks
+- Monitor resource usage
+- Centralize logs (ELK, Datadog, etc.)
+
+### 5. **Networking**
+- Use custom networks for isolation
+- Enable inter-service discovery
+- Document port mappings
+- Use environment variables for host/port
+
+### 6. **Development Workflow**
+- Use docker-compose for local development
+- Hot reload with volume mounts
+- Commit .dockerignore and docker-compose.yml
+- Version your base images
+- Test images locally before pushing
+
+### 7. **Registry Management**
+- Use private registries for proprietary images
+- Tag images consistently (latest, version, git-sha)
+- Implement image scanning
+- Clean up old images
+- Use semantic versioning
+
+---
+
+## 10. TROUBLESHOOTING
+
+### Common Issues & Solutions
+
+**Issue 1: Container exits immediately**
+```bash
+# Check logs
+docker logs mycontainer
+
+# Run interactively to debug
+docker run -it myimage bash
+```
+
+**Issue 2: Port already in use**
+```bash
+# Find what's using the port
+lsof -i :8080
+
+# Use different port
+docker run -p 8081:8080 myimage
+```
+
+**Issue 3: Out of disk space**
+```bash
+# Check Docker disk usage
+docker system df
+
+# Clean up
+docker system prune
+docker image prune -a
+docker volume prune
+```
+
+**Issue 4: Slow builds**
+```bash
+# Check build cache
+docker build --no-cache -t myimage .
+
+# Reorder Dockerfile: stable → changing
+# Use build cache effectively
+```
+
+**Issue 5: Container can't reach database**
+```bash
+# Verify network connectivity
+docker network inspect mynetwork
+
+# Check if service is healthy
+docker ps
+
+# Test connectivity
+docker exec mycontainer ping db
+```
+
+**Issue 6: Permission denied errors**
+```bash
+# Check file permissions
+docker exec mycontainer ls -la /app
+
+# Fix ownership
+docker exec -u root mycontainer chown -R appuser:appuser /app
+```
+
+**Issue 7: Memory/CPU limits exceeded**
+```bash
+# Monitor resources
+docker stats
+
+# Set limits
+docker run -m 512m --cpus=1 myimage
+
+# In compose
+services:
+  web:
+    resources:
+      limits:
+        memory: 512M
+        cpus: 1.0
+```
+
+---
+
+## Quick Reference
+
+### Essential Commands
+```bash
+# Build & Run
+docker build -t name:tag .
+docker run -d -p 8080:80 --name container name:tag
+
+# Container Management
+docker ps                    # List running
+docker ps -a                # List all
+docker logs -f container    # View logs
+docker exec -it container bash  # Enter container
+docker stop/start/restart container
+
+# Image Management
+docker images               # List images
+docker pull/push image      # Registry
+docker rmi image            # Remove
+docker history image        # View layers
+
+# Compose
+docker-compose up -d        # Start
+docker-compose down         # Stop
+docker-compose logs -f      # View logs
+docker-compose ps           # Status
+
+# Network
+docker network create name
+docker network ls
+docker network inspect name
+
+# Volume
+docker volume create name
+docker volume ls
+docker volume inspect name
+```
+
+---
+
+## Summary
+
+Docker is essential for modern development and deployment. Key takeaways:
+
+1. **Images** are blueprints, **containers** are instances
+2. **Layers** provide caching and efficiency
+3. **Compose** enables multi-container setups locally
+4. **Security** requires multiple layers of protection
+5. **Optimization** matters for performance and cost
+6. **Best practices** prevent headaches later
+
+For production, consider orchestrators like **Kubernetes** for advanced features like auto-scaling, self-healing, and rolling updates.
