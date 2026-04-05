@@ -168,51 +168,6 @@ This project demonstrates how to deploy and manage a scalable application on AWS
 
 ---
 
-## 🏗️ Architecture
-High-level architecture flow:
-
-User → Load Balancer → Compute Instance → Storage
-
-(Add architecture diagram if available)
-
----
-
-## ⚙️ Setup & Deployment Steps
-1. Create cloud account
-2. Configure IAM roles
-3. Launch compute resources
-4. Configure networking & security
-5. Deploy application
-
----
-
-## 🔐 Security Measures
-- IAM least privilege access
-- Security group rules
-- Key-based authentication
-- Encrypted storage
-
----
-
-## 📈 Outcome
-- Application successfully deployed on cloud
-- High availability achieved
-- Secure access implemented
-
----
-
-## 🧠 Key Learnings
-- Cloud infrastructure fundamentals
-- Networking & security best practices
-- Cost-effective resource management
-
----
-
-## 👤 Author
-Your Name  
-GitHub: https://github.com/username  
-LinkedIn: https://linkedin.com/in/yourprofile
-
 
 
 
