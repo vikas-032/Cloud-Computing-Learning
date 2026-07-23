@@ -167,6 +167,7 @@ This project demonstrates how to deploy and manage a scalable application on AWS
 - Monitoring: CloudWatch / Azure Monitor
 
 - ## DevOPS
+- ## Networking
 
 ---
 
