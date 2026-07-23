@@ -166,6 +166,8 @@ This project demonstrates how to deploy and manage a scalable application on AWS
 - IAM: Roles & Policies
 - Monitoring: CloudWatch / Azure Monitor
 
+- ## DevOPS
+
 ---
 
 
